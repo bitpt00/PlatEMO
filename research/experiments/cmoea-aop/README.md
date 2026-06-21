@@ -4,12 +4,14 @@ This is the fixed GitHub entry for GPT review and Codex execution.
 
 ## Read First
 
-1. Experiment protocol: `protocol.md`
-2. Baseline notes: `baseline_reproduction.md`
-3. Candidate ideas: `variant_ideas.md`
-4. Knowledge-base entry: `../../../knowledge/MO-Paper-KB/GPT_ENTRY.md`
-5. CMOEA-AOP paper card: `../../../knowledge/MO-Paper-KB/01_papers/P2026-0201.md`
-6. DRL operator-selection design card: `../../../knowledge/MO-Paper-KB/02_design_knowledge/K-drl-state-driven-evolutionary-operator-selection.md`
+1. Web GPT prompt: `GPT_WEB_PROMPT.md`
+2. Full baseline paper PDF: `papers/2603.16401v1.pdf`
+3. Experiment protocol: `protocol.md`
+4. Baseline notes: `baseline_reproduction.md`
+5. Candidate ideas: `variant_ideas.md`
+6. Knowledge-base entry: `../../../knowledge/MO-Paper-KB/GPT_ENTRY.md`
+7. CMOEA-AOP paper card: `../../../knowledge/MO-Paper-KB/01_papers/P2026-0201.md`
+8. DRL operator-selection design card: `../../../knowledge/MO-Paper-KB/02_design_knowledge/K-drl-state-driven-evolutionary-operator-selection.md`
 
 ## Code To Inspect
 
@@ -28,11 +30,17 @@ Key files:
 - `EnvironmentalSelection.m`
 - `CalFitness.m`
 
+GitHub code URL:
+
+```text
+https://github.com/bitpt00/PlatEMO/tree/codex-test-upload/PlatEMO/Algorithms/Multi-objective%20optimization/CMOEA-AOP
+```
+
 ## GPT Review Task
 
 When proposing a modification, please provide:
 
-1. Evidence source from the paper card or design-knowledge card.
+1. Evidence source from the full PDF, paper card, or design-knowledge card.
 2. Failure mode or limitation of baseline CMOEA-AOP.
 3. Exact code module to modify.
 4. Minimal implementation plan for Codex.

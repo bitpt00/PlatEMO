@@ -10,6 +10,18 @@ CMOEA-AOP research and experiment loop:
 research/experiments/cmoea-aop/README.md
 ```
 
+Prompt for the web GPT reviewer:
+
+```text
+research/experiments/cmoea-aop/GPT_WEB_PROMPT.md
+```
+
+Full baseline paper PDF:
+
+```text
+research/experiments/cmoea-aop/papers/2603.16401v1.pdf
+```
+
 ## Knowledge Base
 
 The paper knowledge base is mirrored in this repository so GPT can read it from GitHub:
@@ -21,6 +33,7 @@ knowledge/MO-Paper-KB/GPT_ENTRY.md
 For the CMOEA-AOP experiment, start with:
 
 ```text
+research/experiments/cmoea-aop/papers/2603.16401v1.pdf
 knowledge/MO-Paper-KB/01_papers/P2026-0201.md
 knowledge/MO-Paper-KB/02_design_knowledge/K-drl-state-driven-evolutionary-operator-selection.md
 ```
