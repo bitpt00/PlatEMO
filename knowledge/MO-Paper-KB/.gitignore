@@ -1,0 +1,16 @@
+# Queue/runtime files
+00_index/.paper_queue.lock
+*.lock
+
+# Temporary files
+tmp/
+temp/
+screenshots/
+*.tmp
+*.log
+*.asv
+
+# Optional source dumps should stay outside this repo unless explicitly reviewed
+pdfs/
+MD/
+*.pdf
