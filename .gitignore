@@ -1,0 +1,13 @@
+#忽略的文件格式
+*.asv
+*.m~
+*.tmp
+*.log
+
+# 忽略的文件夹
+Data/*
+/results/
+tmp/
+temp/
+research/experiments/*/results/*
+!research/experiments/*/results/.gitignore
