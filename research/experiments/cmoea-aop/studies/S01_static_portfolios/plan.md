@@ -58,20 +58,15 @@ Smoke 测试：
 
 Discovery 集合：
 
-| Problem | 原因 |
-| --- | --- |
-| CF2 | 论文中用于说明 operator portfolio 差异的案例。 |
-| CF6 | 论文中用于 convergence profile 讨论的案例。 |
-| CF9 | 论文中用于说明 operator portfolio 差异的案例。 |
-| LIRCMOP3 | 来自协议的困难约束案例。 |
-| LIRCMOP4 | 来自协议的困难约束案例。 |
-| LIRCMOP12 | 论文图中涉及窄小/分离可行域的案例。 |
-| DASCMOP1 | 第一个 DAS-CMOP sanity case。 |
-| DASCMOP8 | 论文可视化案例。 |
+| Suite | Problem | 原因 |
+| --- | --- | --- |
+| CF | CF1-CF10 | 与论文主实验的 CF suite 对齐。 |
+| LIR-CMOP | LIRCMOP1-LIRCMOP14 | 与论文主实验的 LIR-CMOP suite 对齐。 |
+| DAS-CMOP | DASCMOP1-DASCMOP9 | 与论文主实验的 DAS-CMOP suite 对齐。 |
 
 确认实验集合：
 
-只有当 smoke 和 discovery 揭示出值得确认的机制时，才跑论文中的全部 33 个问题。
+Discovery 已使用论文中的全部 33 个问题。Confirmation 阶段不再扩大问题数量，而是提高 `maxFE` 和独立运行次数，使设置接近论文主实验。
 
 ## 运行规模
 
@@ -83,6 +78,8 @@ Discovery 集合：
 | confirmation | 100 | 100000 | 30 |
 
 先从 smoke 开始。所有 policy 都能产生有效输出文件后，再启动 discovery。
+
+`discovery-fast` 的任务量为 12 个算法/策略 x 33 个问题 x 3 个 seeds = 1188 个任务。它的作用是快速找机制线索，不直接作为最终论文级统计结论。
 
 ## 多 MATLAB 规则
 

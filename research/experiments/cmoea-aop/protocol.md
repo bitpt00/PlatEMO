@@ -22,11 +22,13 @@ PlatEMO\Algorithms\Multi-objective optimization\CMOEA-AOP
 - LIRCMOP1
 - DASCMOP1
 
-在完整论文规模实验之前，先复现一个小型 benchmark 子集：
+S01 扩大规模时，问题集合直接对齐论文主实验，但先使用较低预算做机制发现：
 
-- CF1、CF6、CF9
-- LIRCMOP3、LIRCMOP4、LIRCMOP12
-- DASCMOP8
+- CF1-CF10
+- LIRCMOP1-LIRCMOP14
+- DASCMOP1-DASCMOP9
+
+该阶段不是论文级最终统计，而是使用 `maxFE = 20000`、3 个独立 seeds 观察固定算子组合的机制差异。
 
 本地论文卡片记录的论文规模参考设置：
 
