@@ -6,7 +6,6 @@ This directory records experiment design, AI review notes, implementation logs, 
 
 ```text
 research/
-  ai_loop/       GPT review prompts, Codex execution notes, and iteration records
   experiments/   Experiment protocols, configs, scripts, summaries, and raw-result placeholders
   kb_links.md    Pointers to the external paper knowledge base
 ```

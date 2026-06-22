@@ -52,4 +52,4 @@ After implementation, Codex should update:
 
 - `baseline_reproduction.md` or a variant-specific result summary;
 - `summaries/` for compact tables and figures;
-- `research/ai_loop/...` for implementation notes.
+- this experiment directory for implementation notes and GPT review material.
