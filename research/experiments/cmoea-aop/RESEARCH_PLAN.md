@@ -44,17 +44,17 @@ research/experiments/cmoea-aop/results/
 | Study | 目的 | 状态 | 当前输出 |
 | --- | --- | --- | --- |
 | S00_directory_setup | 建立长期工作区和计划文件。 | 已完成 | `RESEARCH_PLAN.md`、`studies/`、`CMOEA-AOP-Lab/` |
-| S01_static_portfolios | 检验固定或随机算子组合是否能解释 CMOEA-AOP 部分收益。 | 已完成 smoke | `studies/S01_static_portfolios/plan.md`、`summary.md`、`runs.csv` |
+| S01_static_portfolios | 检验固定或随机算子组合是否能解释 CMOEA-AOP 部分收益。 | 已完成 discovery-fast | `studies/S01_static_portfolios/plan.md`、`summary.md`、`runs.csv` |
 | S02_controller_family | 在理解静态组合基线后，比较轻量级动态控制器。 | 计划中 | `studies/S02_controller_family/plan.md` |
 | S03_credit_signal | 分离 reward 或 credit 信号对算子选择的作用。 | 计划中 | `studies/S03_credit_signal/plan.md` |
 | S04_dual_population_portfolio | 研究双种群行为和算子组合策略之间的关系。 | 计划中 | `studies/S04_dual_population_portfolio/plan.md` |
 
 ## 下一步
 
-S01 smoke 已经通过后，下一步进入：
+S01 discovery-fast 已经完成后，下一步进入：
 
 ```text
-S01_static_portfolios discovery-fast runs
+GPT Pro 机制解释和下一阶段路线判断
 ```
 
-该阶段使用论文主实验的完整 33 个问题集，但先保持较低预算：`maxFE = 20000`、3 个 seeds。目的不是直接得到论文级最终结论，而是判断哪些固定组合现象值得交给 GPT Pro 做解释。
+当前应先解释 33 个问题集上的 discovery-fast 结果，再决定继续 `discovery-main`，还是转向 S02 动态比例控制器对照。
