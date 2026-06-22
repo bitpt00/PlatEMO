@@ -25,7 +25,9 @@ classdef CMOEA_AOP_Lab < ALGORITHM
             cnt            = 0;
             creditRates      = [1/3,1/3,1/3];
             creditRatesByPop = repmat(creditRates,2,1);
-            Algorithm.policyTrace = struct('FE',{},'progress',{},'policy',{},'rates',{},'ratesByPop',{},'generated',{},'survived',{});
+            Algorithm.policyTrace = struct('FE',{},'progress',{},'policy',{},'rates',{},'ratesByPop',{}, ...
+                'generated',{},'survived',{},'generatedByPop',{},'survivedByPop',{}, ...
+                'creditCount',{},'feasibleByPop',{},'cvScoreByPop',{},'objScoreByPop',{});
 
             %% Optimization
             while Algorithm.NotTerminated(Population{1})
@@ -103,6 +105,12 @@ classdef CMOEA_AOP_Lab < ALGORITHM
                 Algorithm.policyTrace(cnt).ratesByPop = ratesByPop;
                 Algorithm.policyTrace(cnt).generated = generated;
                 Algorithm.policyTrace(cnt).survived  = survived;
+                Algorithm.policyTrace(cnt).generatedByPop = generatedByPop;
+                Algorithm.policyTrace(cnt).survivedByPop  = survivedByPop;
+                Algorithm.policyTrace(cnt).creditCount    = creditObs.count;
+                Algorithm.policyTrace(cnt).feasibleByPop  = creditObs.feasible;
+                Algorithm.policyTrace(cnt).cvScoreByPop   = creditObs.cvScore;
+                Algorithm.policyTrace(cnt).objScoreByPop  = creditObs.objScore;
             end
         end
     end
