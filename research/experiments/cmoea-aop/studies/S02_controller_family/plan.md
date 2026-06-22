@@ -1,25 +1,25 @@
-# S02 Controller Family Plan
+# S02 控制器家族实验计划
 
-## Goal
+## 目标
 
-Compare lightweight controller families after S01 establishes static and random portfolio baselines.
+在 S01 建立静态和随机 portfolio 基线之后，比较更轻量的动态控制器家族。
 
-## Scope
+## 范围
 
-- Build only on evidence from S01.
-- Keep the original `CMOEA-AOP/` code unchanged.
-- Put controller-family variants in `CMOEA-AOP-Lab/`.
-- Do not run this study until S01 has enough summary data.
+- 只基于 S01 的证据继续推进。
+- 保持原始 `CMOEA-AOP/` 代码不变。
+- 控制器家族变体放在 `CMOEA-AOP-Lab/`。
+- 在 S01 有足够汇总数据前，不启动本 study。
 
-## Candidate Directions
+## 候选方向
 
-- Rule-based stage controller.
-- Bandit-style controller.
-- Credit-smoothed adaptive controller.
-- Minimal learned controller, if justified by S01.
+- 基于阶段规则的控制器。
+- bandit 风格控制器。
+- 带 credit smoothing 的自适应控制器。
+- 如果 S01 结果确实支持，再考虑最小学习型控制器。
 
-## Planned Outputs
+## 计划输出
 
-- `runs.csv` for final metrics after runs exist.
-- `checkpoints.csv` for process-level metrics after runs exist.
-- `summary.md` for Codex execution notes and compact conclusions after runs exist.
+- `runs.csv`：有真实运行结果后记录最终指标。
+- `checkpoints.csv`：有真实运行结果后记录过程级指标。
+- `summary.md`：有真实运行结果后记录 Codex 执行说明和紧凑结论。

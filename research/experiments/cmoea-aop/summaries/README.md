@@ -1,5 +1,5 @@
-# Summaries
+# 汇总
 
-Store compact tables, figures, and human-readable result summaries here.
+这里存放紧凑表格、图和便于人工阅读的结果总结。
 
-Raw `.mat` files and large logs belong in `../results/`.
+原始 `.mat` 文件和大型日志应放在 `../results/`。

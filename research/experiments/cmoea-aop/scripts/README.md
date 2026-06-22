@@ -1,5 +1,5 @@
-# Scripts
+# 脚本
 
-Store MATLAB or PowerShell helper scripts for running controlled experiments.
+这里存放用于运行受控实验的 MATLAB 或 PowerShell 辅助脚本。
 
-Scripts should write heavy outputs to `../results/`.
+脚本应把大体量输出写入 `../results/`。

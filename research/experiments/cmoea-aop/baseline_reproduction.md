@@ -1,16 +1,16 @@
-# Baseline Reproduction Notes
+# 基准复现实验记录
 
-## Smoke Test
+## Smoke 测试
 
-| Date | Algorithm | Problem | N | maxFE | Seed | Status | Notes |
+| 日期 | 算法 | 问题 | N | maxFE | Seed | 状态 | 备注 |
 |---|---|---:|---:|---:|---:|---|---|
-| TBD | CMOEA-AOP | CF1 | 100 | TBD | TBD | pending |  |
-| TBD | CMOEA-AOP | LIRCMOP1 | 100 | TBD | TBD | pending |  |
-| TBD | CMOEA-AOP | DASCMOP1 | 100 | TBD | TBD | pending |  |
+| 待定 | CMOEA-AOP | CF1 | 100 | 待定 | 待定 | 待运行 |  |
+| 待定 | CMOEA-AOP | LIRCMOP1 | 100 | 待定 | 待定 | 待运行 |  |
+| 待定 | CMOEA-AOP | DASCMOP1 | 100 | 待定 | 待定 | 待运行 |  |
 
-## Reproduction Questions
+## 复现问题
 
-- Does the baseline run without errors in MATLAB R2023a?
-- Does DDPG training require Deep Learning Toolbox only, or additional toolboxes?
-- Are final indicators stable enough under fixed seeds?
-- Does the implementation match the paper-card description of state, action, and reward?
+- 基准算法能否在 MATLAB R2023a 中无错误运行？
+- DDPG 训练只需要 Deep Learning Toolbox，还是还需要其他 toolbox？
+- 固定随机种子下最终指标是否足够稳定？
+- 实现中的 state、action、reward 是否与论文卡片描述一致？

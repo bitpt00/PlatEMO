@@ -1,58 +1,58 @@
-# CMOEA-AOP Experiment Protocol
+# CMOEA-AOP 实验协议
 
-## Goal
+## 目标
 
-Use CMOEA-AOP as the first controlled case for testing research modifications in PlatEMO.
+以 CMOEA-AOP 作为第一个受控案例，在 PlatEMO 中测试机制拆解和算法修改方案。
 
-## Baseline
+## 基准
 
-Keep the original implementation unchanged:
+原始实现保持不变：
 
 ```text
 PlatEMO\Algorithms\Multi-objective optimization\CMOEA-AOP
 ```
 
-Create modified variants in separate directories.
+所有修改版本都放入独立目录。
 
-## First Reproduction Scope
+## 第一阶段复现范围
 
-Start with a smoke test:
+先从 smoke test 开始：
 
 - CF1
 - LIRCMOP1
 - DASCMOP1
 
-Then reproduce a small benchmark subset before running the full paper-scale suite:
+在完整论文规模实验之前，先复现一个小型 benchmark 子集：
 
-- CF1, CF6, CF9
-- LIRCMOP3, LIRCMOP4, LIRCMOP12
+- CF1、CF6、CF9
+- LIRCMOP3、LIRCMOP4、LIRCMOP12
 - DASCMOP8
 
-Paper-scale reference setting from the local paper card:
+本地论文卡片记录的论文规模参考设置：
 
-- population size: 100;
-- maximum function evaluations: 100000;
-- independent runs: 30;
-- metric: IGD;
-- statistical test: Wilcoxon rank-sum test at 0.05.
+- 种群规模：100；
+- 最大函数评价次数：100000；
+- 独立运行次数：30；
+- 指标：IGD；
+- 统计检验：0.05 显著性水平的 Wilcoxon rank-sum test。
 
-## Environment Checks
+## 环境检查
 
-Record before long runs:
+长时间运行前记录：
 
-- MATLAB version;
-- Deep Learning Toolbox availability;
-- current git commit;
-- random seed policy;
-- PlatEMO version;
-- changed algorithm files.
+- MATLAB 版本；
+- Deep Learning Toolbox 是否可用；
+- 当前 git commit；
+- 随机种子策略；
+- PlatEMO 版本；
+- 已修改的算法文件。
 
-## Result Policy
+## 结果管理
 
-Raw result files stay in `results/` and are ignored by git. Commit only:
+原始结果文件留在 `results/`，不进入 git。只提交：
 
-- protocol changes;
-- configs;
-- scripts;
-- compact summaries;
-- final tables and figures needed for review.
+- 实验协议修改；
+- 配置文件；
+- 脚本；
+- 紧凑汇总；
+- 审阅所需的最终表格和图。

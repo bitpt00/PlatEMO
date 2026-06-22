@@ -1,97 +1,97 @@
-# S01 Static Portfolios Plan
+# S01 固定算子组合实验计划
 
-## Goal
+## 目标
 
-Separate the effect of using multiple offspring operators from the effect of DDPG learning the operator ratios in CMOEA-AOP.
+分离 CMOEA-AOP 中“多个 offspring 算子共同使用”的作用，以及“DDPG 学习算子比例”的作用。
 
-The first question is not whether a new variant beats CMOEA-AOP. The first question is whether a simpler portfolio policy can explain much of the observed behavior.
+第一问题不是新变体能否超过 CMOEA-AOP，而是更简单的 portfolio policy 是否已经能解释相当一部分行为。
 
-## Code Boundary
+## 代码边界
 
-- Keep `PlatEMO/Algorithms/Multi-objective optimization/CMOEA-AOP/` unchanged.
-- Implement S01 variants in `PlatEMO/Algorithms/Multi-objective optimization/CMOEA-AOP-Lab/`.
-- Use one parameterized lab algorithm instead of copying one algorithm file per policy.
-- Store raw `.mat` outputs under `research/experiments/cmoea-aop/results/`.
-- Write compact final metrics to this study directory.
+- 保持 `PlatEMO/Algorithms/Multi-objective optimization/CMOEA-AOP/` 不变。
+- S01 变体实现在 `PlatEMO/Algorithms/Multi-objective optimization/CMOEA-AOP-Lab/`。
+- 使用一个带参数的 lab 算法，而不是为每个 policy 复制一份算法文件。
+- 原始 `.mat` 输出放在 `research/experiments/cmoea-aop/results/`。
+- 紧凑最终指标写回本 study 目录。
 
-## Policies
+## 策略
 
-Baseline algorithms:
+基准算法：
 
-| Label | Meaning |
+| Label | 含义 |
 | --- | --- |
-| EMCMO | Original EMCMO with GA offspring generation. |
-| CMOEA-AOP | Original DDPG-based CMOEA-AOP. |
+| EMCMO | 原始 EMCMO，使用 GA offspring generation。 |
+| CMOEA-AOP | 原始基于 DDPG 的 CMOEA-AOP。 |
 
-Static lab policies:
+静态 lab policy：
 
-| Label | GA/SBX | DE/rand/1 | DE/best/1 | Purpose |
+| Label | GA/SBX | DE/rand/1 | DE/best/1 | 目的 |
 | --- | ---: | ---: | ---: | --- |
-| GA-only | 1.00 | 0.00 | 0.00 | Reproduce single GA-style portfolio. |
-| DE-rand-only | 0.00 | 1.00 | 0.00 | Reproduce single DE/rand/1 portfolio. |
-| DE-best-only | 0.00 | 0.00 | 1.00 | Reproduce single DE/best/1 portfolio. |
-| Equal-AOP | 0.33 | 0.33 | 0.33 | Test whether multi-operator coexistence alone is enough. |
-| GA-heavy | 0.60 | 0.20 | 0.20 | Test GA/SBX-biased fixed portfolio. |
-| DE-rand-heavy | 0.20 | 0.60 | 0.20 | Test exploration-biased fixed portfolio. |
-| DE-best-heavy | 0.20 | 0.20 | 0.60 | Test convergence-biased fixed portfolio. |
-| GA+DE-rand | 0.50 | 0.50 | 0.00 | Test two-operator static portfolio. |
-| GA+DE-best | 0.50 | 0.00 | 0.50 | Test two-operator static portfolio. |
-| DE-rand+DE-best | 0.00 | 0.50 | 0.50 | Test two-DE static portfolio. |
+| GA-only | 1.00 | 0.00 | 0.00 | 复现单 GA 风格 portfolio。 |
+| DE-rand-only | 0.00 | 1.00 | 0.00 | 复现单 DE/rand/1 portfolio。 |
+| DE-best-only | 0.00 | 0.00 | 1.00 | 复现单 DE/best/1 portfolio。 |
+| Equal-AOP | 0.33 | 0.33 | 0.33 | 检验多算子共存本身是否足够。 |
+| GA-heavy | 0.60 | 0.20 | 0.20 | 检验偏 GA/SBX 的固定 portfolio。 |
+| DE-rand-heavy | 0.20 | 0.60 | 0.20 | 检验偏探索的固定 portfolio。 |
+| DE-best-heavy | 0.20 | 0.20 | 0.60 | 检验偏收敛的固定 portfolio。 |
+| GA+DE-rand | 0.50 | 0.50 | 0.00 | 检验双算子静态 portfolio。 |
+| GA+DE-best | 0.50 | 0.00 | 0.50 | 检验双算子静态 portfolio。 |
+| DE-rand+DE-best | 0.00 | 0.50 | 0.50 | 检验两个 DE 算子的静态 portfolio。 |
 
-Dynamic non-DDPG policies are implemented only as a second batch:
+动态非 DDPG policy 作为第二批实验：
 
-| Label | Purpose |
+| Label | 目的 |
 | --- | --- |
-| Random-AOP | Test whether random ratio diversity explains the effect. |
-| Stage-AOP | Test whether DDPG mainly learns an early/middle/late schedule. |
-| Survival-Credit-AOP | Test whether immediate offspring survival feedback is enough. |
+| Random-AOP | 检验随机比例多样性是否能解释效果。 |
+| Stage-AOP | 检验 DDPG 是否主要学到早期/中期/后期调度规律。 |
+| Survival-Credit-AOP | 检验即时 offspring 存活反馈是否已经足够。 |
 
-## Test Sets
+## 测试集合
 
-Smoke test:
+Smoke 测试：
 
-| Problem | Reason |
+| Problem | 原因 |
 | --- | --- |
-| CF1 | Simple constrained CF check. |
-| LIRCMOP1 | LIR-CMOP path and feasibility check. |
-| DASCMOP1 | DAS-CMOP path and constraint check. |
+| CF1 | 简单约束 CF 检查。 |
+| LIRCMOP1 | LIR-CMOP 路径和可行性检查。 |
+| DASCMOP1 | DAS-CMOP 路径和约束检查。 |
 
-Discovery set:
+Discovery 集合：
 
-| Problem | Reason |
+| Problem | 原因 |
 | --- | --- |
-| CF2 | Used in the paper motivation for operator-portfolio differences. |
-| CF6 | Used in paper convergence-profile discussion. |
-| CF9 | Used in the paper motivation for operator-portfolio differences. |
-| LIRCMOP3 | Difficult constrained case from protocol. |
-| LIRCMOP4 | Difficult constrained case from protocol. |
-| LIRCMOP12 | Narrow/separated feasible regions in paper figures. |
-| DASCMOP1 | First DAS-CMOP sanity case. |
-| DASCMOP8 | Paper visualization case. |
+| CF2 | 论文中用于说明 operator portfolio 差异的案例。 |
+| CF6 | 论文中用于 convergence profile 讨论的案例。 |
+| CF9 | 论文中用于说明 operator portfolio 差异的案例。 |
+| LIRCMOP3 | 来自协议的困难约束案例。 |
+| LIRCMOP4 | 来自协议的困难约束案例。 |
+| LIRCMOP12 | 论文图中涉及窄小/分离可行域的案例。 |
+| DASCMOP1 | 第一个 DAS-CMOP sanity case。 |
+| DASCMOP8 | 论文可视化案例。 |
 
-Confirmation set:
+确认实验集合：
 
-Use all 33 paper problems only if the smoke and discovery runs reveal a mechanism worth confirming.
+只有当 smoke 和 discovery 揭示出值得确认的机制时，才跑论文中的全部 33 个问题。
 
-## Run Sizes
+## 运行规模
 
-| Stage | N | maxFE | Seeds |
+| 阶段 | N | maxFE | Seeds |
 | --- | ---: | ---: | ---: |
 | smoke | 100 | 5000 | 1 |
 | discovery-fast | 100 | 20000 | 3 |
 | discovery-main | 100 | 50000 | 5 |
 | confirmation | 100 | 100000 | 30 |
 
-Start with smoke. Do not launch discovery until all policies produce valid output files.
+先从 smoke 开始。所有 policy 都能产生有效输出文件后，再启动 discovery。
 
-## Parallel MATLAB Rule
+## 多 MATLAB 规则
 
-Multiple MATLAB processes are allowed. Each worker must run a disjoint task partition and write independent `.mat` files. Do not let multiple workers append to the same CSV.
+允许同时打开多个 MATLAB 进程。每个 worker 必须运行互不重叠的 task partition，并写入独立 `.mat` 文件。不要让多个 worker 同时追加同一个 CSV。
 
-Use worker-specific logs and summarize after all workers finish.
+使用 worker-specific logs；所有 worker 完成后再统一汇总。
 
-## Planned Outputs
+## 计划输出
 
-- `runs.csv`: compact final metrics after runs exist.
-- `summary.md`: Codex execution notes and early interpretation after runs exist.
-- `checkpoints.csv`: add later if we need generation-level trajectory analysis.
+- `runs.csv`：有真实运行结果后写入紧凑最终指标。
+- `summary.md`：有真实运行结果后写入 Codex 执行记录和早期解释。
+- `checkpoints.csv`：如果需要 generation-level trajectory analysis，再后续添加。

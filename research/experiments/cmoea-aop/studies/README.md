@@ -1,10 +1,10 @@
-# CMOEA-AOP Studies
+# CMOEA-AOP 子实验
 
-This directory separates mechanism-decomposition experiments into small, reviewable studies.
+本目录把机制拆解实验拆成较小、便于审阅的 study。
 
-## Study Contract
+## Study 约定
 
-Each study should eventually use this layout:
+每个 study 最终建议采用下面结构：
 
 ```text
 plan.md
@@ -13,22 +13,22 @@ checkpoints.csv
 summary.md
 ```
 
-For S00, only `plan.md` files are created. `runs.csv`, `checkpoints.csv`, and `summary.md` should be created when real runs exist.
+对 S00 来说，只创建 `plan.md`。`runs.csv`、`checkpoints.csv` 和 `summary.md` 应在真实运行结果出现后再创建。
 
-## Studies
+## 子实验列表
 
-| Study | Focus | Plan |
+| Study | 关注点 | 计划文件 |
 | --- | --- | --- |
-| S01_static_portfolios | Static and random operator portfolios. | `S01_static_portfolios/plan.md` |
-| S02_controller_family | Alternative lightweight controller families. | `S02_controller_family/plan.md` |
-| S03_credit_signal | Reward and credit-signal variants. | `S03_credit_signal/plan.md` |
-| S04_dual_population_portfolio | Dual-population and portfolio interactions. | `S04_dual_population_portfolio/plan.md` |
+| S01_static_portfolios | 固定和随机算子组合。 | `S01_static_portfolios/plan.md` |
+| S02_controller_family | 其他轻量级动态控制器。 | `S02_controller_family/plan.md` |
+| S03_credit_signal | reward 和 credit signal 变体。 | `S03_credit_signal/plan.md` |
+| S04_dual_population_portfolio | 双种群和算子组合的交互。 | `S04_dual_population_portfolio/plan.md` |
 
-## Recording Rules
+## 记录规则
 
-- Keep experimental design in `plan.md`.
-- Keep final per-run metrics in `runs.csv`.
-- Keep process checkpoints in `checkpoints.csv`.
-- Keep Codex execution notes and compact conclusions in `summary.md`.
-- Keep large raw files under `../results/`.
-- Do not modify `PlatEMO/Algorithms/Multi-objective optimization/CMOEA-AOP/`.
+- 实验设计写在 `plan.md`。
+- 每次运行的最终指标写在 `runs.csv`。
+- 过程检查点写在 `checkpoints.csv`。
+- Codex 执行记录和紧凑结论写在 `summary.md`。
+- 大体量原始文件放在 `../results/`。
+- 不修改 `PlatEMO/Algorithms/Multi-objective optimization/CMOEA-AOP/`。

@@ -1,33 +1,33 @@
-# CMOEA-AOP Variant Ideas
+# CMOEA-AOP 候选变体想法
 
-These are candidates for GPT review, not approved changes.
+这些想法只作为 GPT Pro 审阅的候选项，不代表已经批准修改。
 
-## X1: Feasibility-Aware Reward
+## X1：可行性敏感 Reward
 
-Add feasibility progress to the reward so the actor is not guided only by HV improvement.
+在 reward 中加入可行性进展，使 actor 不只被 HV improvement 引导。
 
-Review questions:
+审阅问题：
 
-- Should reward include feasible offspring ratio, CV reduction, or both?
-- How should the reward avoid over-favoring feasibility at the cost of diversity?
-- Which ablation should isolate the reward effect?
+- reward 应该包含可行 offspring 比例、CV 下降，还是二者都包含？
+- 如何避免 reward 过度偏向可行性而牺牲多样性？
+- 需要什么消融实验才能分离 reward 的作用？
 
-## X2: Per-Constraint State
+## X2：按约束展开的 State
 
-Replace or supplement average CV with per-constraint summary features.
+用每个约束的统计特征替代或补充平均 CV。
 
-Review questions:
+审阅问题：
 
-- How many constraint features are safe for DDPG stability?
-- Should features be mean CV, max CV, satisfied ratio, or normalized CV?
-- Which CMOPs best test this change?
+- 为保持 DDPG 稳定，约束特征数量应控制到多少？
+- 特征应使用 mean CV、max CV、约束满足比例，还是 normalized CV？
+- 哪些 CMOP 最适合测试这个修改？
 
-## X3: Exploration Floor
+## X3：探索下限
 
-Prevent the operator portfolio from collapsing too early to a single operator.
+防止算子组合过早坍缩到单一算子。
 
-Review questions:
+审阅问题：
 
-- Should exploration be enforced by entropy floor, minimum action ratio, or OU noise schedule?
-- Should the floor decay with `FE/maxFE`?
-- What baseline variant is needed for fair comparison?
+- 探索应通过 entropy floor、minimum action ratio，还是 OU noise schedule 保证？
+- 探索下限是否应随 `FE/maxFE` 衰减？
+- 为公平比较，需要哪个基线变体？

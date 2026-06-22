@@ -1,5 +1,5 @@
-# Configs
+# 配置
 
-Store compact experiment configuration files here.
+这里存放紧凑实验配置文件。
 
-Do not store raw PlatEMO output data in this directory.
+不要把原始 PlatEMO 输出数据放在本目录。

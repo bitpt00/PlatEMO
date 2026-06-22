@@ -1,25 +1,25 @@
-# S03 Credit Signal Plan
+# S03 信用信号实验计划
 
-## Goal
+## 目标
 
-Isolate which reward or credit signal provides useful feedback for operator selection.
+分离哪一种 reward 或 credit signal 能为算子选择提供真正有用的反馈。
 
-## Scope
+## 范围
 
-- Start after S01 and any required controller scaffolding are stable.
-- Keep reward or credit-signal changes separate from unrelated controller changes.
-- Keep the original `CMOEA-AOP/` code unchanged.
-- Put all signal variants in `CMOEA-AOP-Lab/`.
+- 在 S01 和必要的 controller scaffolding 稳定后启动。
+- reward 或 credit-signal 改动要与无关 controller 改动分开。
+- 保持原始 `CMOEA-AOP/` 代码不变。
+- 所有信号变体放在 `CMOEA-AOP-Lab/`。
 
-## Candidate Directions
+## 候选方向
 
-- Feasibility-improvement credit.
-- Objective-progress credit.
-- Diversity-preservation credit.
-- Composite credit with explicit ablation.
+- 可行性改善 credit。
+- 目标函数进展 credit。
+- 多样性保持 credit。
+- 带显式消融的组合 credit。
 
-## Planned Outputs
+## 计划输出
 
-- `runs.csv` for final metrics after runs exist.
-- `checkpoints.csv` for process-level metrics after runs exist.
-- `summary.md` for Codex execution notes and compact conclusions after runs exist.
+- `runs.csv`：有真实运行结果后记录最终指标。
+- `checkpoints.csv`：有真实运行结果后记录过程级指标。
+- `summary.md`：有真实运行结果后记录 Codex 执行说明和紧凑结论。

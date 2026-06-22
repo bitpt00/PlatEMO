@@ -1,60 +1,60 @@
-# CMOEA-AOP Research Plan
+# CMOEA-AOP 研究计划
 
-This file is the long-term route map for mechanism-decomposition experiments around CMOEA-AOP.
+这个文件记录围绕 CMOEA-AOP 做机制拆解实验的长期路线图。
 
-## Scope
+## 范围
 
-S00_directory_setup establishes the workspace only. It does not modify algorithm code and does not run experiments.
+`S00_directory_setup` 只建立工作区和计划文件，不修改算法代码，也不运行实验。
 
-The baseline implementation remains unchanged:
+基准实现保持不变：
 
 ```text
 PlatEMO/Algorithms/Multi-objective optimization/CMOEA-AOP/
 ```
 
-Experimental variants belong in the lab sandbox:
+实验变体统一放在独立沙盒：
 
 ```text
 PlatEMO/Algorithms/Multi-objective optimization/CMOEA-AOP-Lab/
 ```
 
-Study plans, run summaries, and analysis notes belong under:
+子实验计划、运行汇总和分析记录放在：
 
 ```text
 research/experiments/cmoea-aop/studies/
 ```
 
-Large raw local outputs belong under:
+本地大体量原始输出放在：
 
 ```text
 research/experiments/cmoea-aop/results/
 ```
 
-## Operating Rules
+## 执行规则
 
-- Preserve `CMOEA-AOP/` as the baseline implementation.
-- Put variant code in `CMOEA-AOP-Lab/`.
-- Keep each mechanism question in its own study directory.
-- Create `runs.csv`, `checkpoints.csv`, and `summary.md` only after real experiment data exists.
-- Keep raw `.mat`, logs, seed outputs, and full population files in `results/`.
-- Commit plans, scripts, compact summaries, and necessary figures; do not commit large raw outputs.
+- 保留 `CMOEA-AOP/` 作为不可改动的基准实现。
+- 变体代码写入 `CMOEA-AOP-Lab/`。
+- 每个机制问题放入独立 study 目录。
+- 只有真实实验数据产生后，才创建或更新 `runs.csv`、`checkpoints.csv` 和 `summary.md`。
+- 原始 `.mat`、日志、种子输出、完整种群文件留在 `results/`。
+- Git 中提交计划、脚本、紧凑汇总和必要图表，不提交大体量原始输出。
 
-## Study Roadmap
+## 子实验路线
 
-| Study | Purpose | Status | Current output |
+| Study | 目的 | 状态 | 当前输出 |
 | --- | --- | --- | --- |
-| S00_directory_setup | Establish the long-term workspace and planning files. | Complete | `RESEARCH_PLAN.md`, `studies/`, `CMOEA-AOP-Lab/` |
-| S01_static_portfolios | Test whether simple fixed or random operator portfolios explain part of CMOEA-AOP's benefit. | Planned | `studies/S01_static_portfolios/plan.md` |
-| S02_controller_family | Compare lightweight controller families after the static portfolio baselines are understood. | Planned | `studies/S02_controller_family/plan.md` |
-| S03_credit_signal | Isolate which reward or credit signal best supports operator selection. | Planned | `studies/S03_credit_signal/plan.md` |
-| S04_dual_population_portfolio | Study interactions between dual-population behavior and operator portfolios. | Planned | `studies/S04_dual_population_portfolio/plan.md` |
+| S00_directory_setup | 建立长期工作区和计划文件。 | 已完成 | `RESEARCH_PLAN.md`、`studies/`、`CMOEA-AOP-Lab/` |
+| S01_static_portfolios | 检验固定或随机算子组合是否能解释 CMOEA-AOP 部分收益。 | 已完成 smoke | `studies/S01_static_portfolios/plan.md`、`summary.md`、`runs.csv` |
+| S02_controller_family | 在理解静态组合基线后，比较轻量级动态控制器。 | 计划中 | `studies/S02_controller_family/plan.md` |
+| S03_credit_signal | 分离 reward 或 credit 信号对算子选择的作用。 | 计划中 | `studies/S03_credit_signal/plan.md` |
+| S04_dual_population_portfolio | 研究双种群行为和算子组合策略之间的关系。 | 计划中 | `studies/S04_dual_population_portfolio/plan.md` |
 
-## Next Step
+## 下一步
 
-After S00 is reviewed, start:
+S01 smoke 已经通过后，下一步进入：
 
 ```text
-S01_static_portfolios implementation and discovery runs
+S01_static_portfolios discovery-fast runs
 ```
 
-That step should create only the MATLAB code and result files needed for the S01 study.
+该阶段只扩大问题集和随机种子数量，用来判断哪些固定组合现象值得交给 GPT Pro 做解释。
