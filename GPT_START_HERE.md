@@ -10,6 +10,12 @@ CMOEA-AOP research and experiment loop:
 research/experiments/cmoea-aop/README.md
 ```
 
+Long-term research plan and study status:
+
+```text
+research/experiments/cmoea-aop/RESEARCH_PLAN.md
+```
+
 Prompt for the web GPT reviewer:
 
 ```text

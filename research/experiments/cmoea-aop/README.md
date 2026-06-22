@@ -4,14 +4,16 @@ This is the fixed GitHub entry for GPT review and Codex execution.
 
 ## Read First
 
-1. Web GPT prompt: `GPT_WEB_PROMPT.md`
-2. Full baseline paper PDF: `papers/2603.16401v1.pdf`
-3. Experiment protocol: `protocol.md`
-4. Baseline notes: `baseline_reproduction.md`
-5. Candidate ideas: `variant_ideas.md`
-6. Knowledge-base entry: `../../../knowledge/MO-Paper-KB/GPT_ENTRY.md`
-7. CMOEA-AOP paper card: `../../../knowledge/MO-Paper-KB/01_papers/P2026-0201.md`
-8. DRL operator-selection design card: `../../../knowledge/MO-Paper-KB/02_design_knowledge/K-drl-state-driven-evolutionary-operator-selection.md`
+1. Long-term research plan: `RESEARCH_PLAN.md`
+2. Study workspace: `studies/README.md`
+3. Web GPT prompt: `GPT_WEB_PROMPT.md`
+4. Full baseline paper PDF: `papers/2603.16401v1.pdf`
+5. Experiment protocol: `protocol.md`
+6. Baseline notes: `baseline_reproduction.md`
+7. Candidate ideas: `variant_ideas.md`
+8. Knowledge-base entry: `../../../knowledge/MO-Paper-KB/GPT_ENTRY.md`
+9. CMOEA-AOP paper card: `../../../knowledge/MO-Paper-KB/01_papers/P2026-0201.md`
+10. DRL operator-selection design card: `../../../knowledge/MO-Paper-KB/02_design_knowledge/K-drl-state-driven-evolutionary-operator-selection.md`
 
 ## Code To Inspect
 
@@ -19,6 +21,12 @@ Baseline implementation:
 
 ```text
 PlatEMO/Algorithms/Multi-objective optimization/CMOEA-AOP/
+```
+
+Experimental variants:
+
+```text
+PlatEMO/Algorithms/Multi-objective optimization/CMOEA-AOP-Lab/
 ```
 
 Key files:
@@ -50,6 +58,7 @@ When proposing a modification, please provide:
 
 After implementation, Codex should update:
 
-- `baseline_reproduction.md` or a variant-specific result summary;
-- `summaries/` for compact tables and figures;
+- `baseline_reproduction.md` for original baseline reproduction only;
+- the relevant `studies/<study>/summary.md`, `runs.csv`, and `checkpoints.csv` when real study results exist;
+- `summaries/` for compact cross-study tables and figures when needed;
 - this experiment directory for implementation notes and GPT review material.
