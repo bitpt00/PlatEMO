@@ -45,16 +45,16 @@ research/experiments/cmoea-aop/results/
 | --- | --- | --- | --- |
 | S00_directory_setup | 建立长期工作区和计划文件。 | 已完成 | `RESEARCH_PLAN.md`、`studies/`、`CMOEA-AOP-Lab/` |
 | S01_static_portfolios | 检验固定或随机算子组合是否能解释 CMOEA-AOP 部分收益。 | 已完成 discovery-fast | `studies/S01_static_portfolios/plan.md`、`summary.md`、`runs.csv` |
-| S02_controller_family | 在理解静态组合基线后，比较轻量级动态控制器。 | 计划中 | `studies/S02_controller_family/plan.md` |
-| S03_credit_signal | 分离 reward 或 credit 信号对算子选择的作用。 | 计划中 | `studies/S03_credit_signal/plan.md` |
-| S04_dual_population_portfolio | 研究双种群行为和算子组合策略之间的关系。 | 计划中 | `studies/S04_dual_population_portfolio/plan.md` |
+| S02_controller_family | 在理解静态组合基线后，比较轻量级动态控制器。 | 已完成 fast | `studies/S02_controller_family/summary.md`、`runs.csv` |
+| S03_credit_signal | 分离 reward 或 credit 信号对算子选择的作用。 | 已完成 fast | `studies/S03_credit_signal/summary.md`、`runs.csv` |
+| S04_dual_population_portfolio | 研究双种群行为和算子组合策略之间的关系。 | 已完成 fast | `studies/S04_dual_population_portfolio/summary.md`、`runs.csv` |
 
 ## 下一步
 
-S01 discovery-fast 已经完成后，下一步进入：
+S01-S04 fast 实验已经完成后，下一步进入：
 
 ```text
-GPT Pro 机制解释和下一阶段路线判断
+GPT Pro 综合机制解释和下一阶段确认实验筛选
 ```
 
-当前应先解释 33 个问题集上的 discovery-fast 结果，再决定继续 `discovery-main`，还是转向 S02 动态比例控制器对照。
+当前应先解释 33 个问题集上的 fast 结果，再选择少数有潜力的策略进入更高预算确认实验。
