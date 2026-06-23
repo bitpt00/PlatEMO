@@ -96,7 +96,7 @@ classdef CMOEA_AOP_Lab < ALGORITHM
                 end
 
                 [creditRates,creditRatesByPop] = LabUpdatePolicyCredit(policyName,creditRates,creditRatesByPop, ...
-                    generatedByPop,survivedByPop,creditObs,creditAlpha,creditFloor);
+                    generatedByPop,survivedByPop,creditObs,creditAlpha,creditFloor,progress);
 
                 Algorithm.policyTrace(cnt).FE        = Problem.FE;
                 Algorithm.policyTrace(cnt).progress  = Problem.FE/Problem.maxFE;
@@ -131,6 +131,14 @@ function ratesByPop = LabSelectRatesByPopulation(policyName,customRates,creditRa
         case {'dual_role_credit_v2','dual_role_v2'}
             ratesByPop = creditRatesByPop;
         case {'dual_role_credit_v3','dual_role_v3','dual_role_sliding'}
+            ratesByPop = creditRatesByPop;
+        case {'role_separated_credit_v1','role_separated_v1'}
+            ratesByPop = creditRatesByPop;
+        case {'role_separated_credit_v2','role_separated_v2'}
+            ratesByPop = creditRatesByPop;
+        case {'role_separated_credit_v3','role_separated_v3'}
+            ratesByPop = creditRatesByPop;
+        case {'role_separated_credit_v4','role_separated_v4'}
             ratesByPop = creditRatesByPop;
         otherwise
             rates = LabSelectRates(policyName,customRates,creditRates,progress);
@@ -417,7 +425,7 @@ function obs = LabObserveOffspring(obs,popIndex,source,Offspring)
     end
 end
 
-function [creditRates,creditRatesByPop] = LabUpdatePolicyCredit(policyName,creditRates,creditRatesByPop,generatedByPop,survivedByPop,obs,alpha,floorRate)
+function [creditRates,creditRatesByPop] = LabUpdatePolicyCredit(policyName,creditRates,creditRatesByPop,generatedByPop,survivedByPop,obs,alpha,floorRate,progress)
     generated = sum(generatedByPop,1);
     survived  = sum(survivedByPop,1);
     switch policyName
@@ -459,6 +467,14 @@ function [creditRates,creditRatesByPop] = LabUpdatePolicyCredit(policyName,credi
             smoothAlpha = min(alpha,0.12);
             creditRatesByPop(1,:) = LabUpdateCreditRatesFromScore(creditRatesByPop(1,:),generatedByPop(1,:),score1,smoothAlpha,max(floorRate,0.08));
             creditRatesByPop(2,:) = LabUpdateCreditRatesFromScore(creditRatesByPop(2,:),generatedByPop(2,:),score2,smoothAlpha,max(floorRate,0.08));
+        case {'role_separated_credit_v1','role_separated_v1', ...
+              'role_separated_credit_v2','role_separated_v2', ...
+              'role_separated_credit_v3','role_separated_v3', ...
+              'role_separated_credit_v4','role_separated_v4'}
+            [score1,score2,prior1,prior2,priorWeight,floor1,floor2,updateAlpha] = LabRoleSeparatedCredit(policyName, ...
+                survivedByPop,obs,alpha,floorRate,progress);
+            creditRatesByPop(1,:) = LabUpdateCreditRatesWithPrior(creditRatesByPop(1,:),generatedByPop(1,:),score1,updateAlpha,floor1,prior1,priorWeight);
+            creditRatesByPop(2,:) = LabUpdateCreditRatesWithPrior(creditRatesByPop(2,:),generatedByPop(2,:),score2,updateAlpha,floor2,prior2,priorWeight);
     end
 end
 
@@ -476,6 +492,78 @@ function rates = LabUpdateCreditRatesFromScore(oldRates,generated,score,alpha,fl
         target = normalizedScore./sum(normalizedScore);
     end
     target = max(target,floorRate);
+    target = target./sum(target);
+    rates  = (1-alpha).*oldRates + alpha.*target;
+    rates  = LabNormalizeRates(rates);
+end
+
+function [score1,score2,prior1,prior2,priorWeight,floor1,floor2,updateAlpha] = LabRoleSeparatedCredit(policyName,survivedByPop,obs,alpha,floorRate,progress)
+    policyName = lower(char(policyName));
+    score1 = survivedByPop(1,:) + 1.5*obs.feasible(1,:) + 2.0*obs.cvScore(1,:);
+    score2 = 0.5*survivedByPop(2,:) + 2.0*obs.objScore(2,:) + 0.2*obs.cvScore(2,:);
+    switch policyName
+        case {'role_separated_credit_v1','role_separated_v1'}
+            prior1 = [0.45,0.10,0.45];
+            prior2 = [0.15,0.65,0.20];
+            priorWeight = 0.35;
+            floor1 = [0.12,0.05,0.12];
+            floor2 = [0.05,0.15,0.05];
+            updateAlpha = alpha;
+        case {'role_separated_credit_v2','role_separated_v2'}
+            prior1 = [0.50,0.05,0.45];
+            prior2 = [0.10,0.75,0.15];
+            priorWeight = 0.50;
+            floor1 = [0.15,0.03,0.15];
+            floor2 = [0.03,0.20,0.03];
+            updateAlpha = alpha;
+        case {'role_separated_credit_v3','role_separated_v3'}
+            if progress < 0.25
+                prior1 = [0.35,0.20,0.45];
+                prior2 = [0.10,0.75,0.15];
+            elseif progress < 0.70
+                prior1 = [0.45,0.15,0.40];
+                prior2 = [0.18,0.62,0.20];
+            else
+                prior1 = [0.50,0.10,0.40];
+                prior2 = [0.25,0.35,0.40];
+            end
+            priorWeight = 0.45;
+            floor1 = [0.12,0.05,0.12];
+            floor2 = [0.05,0.18,0.05];
+            updateAlpha = alpha;
+        case {'role_separated_credit_v4','role_separated_v4'}
+            prior1 = [0.48,0.08,0.44];
+            prior2 = [0.12,0.68,0.20];
+            priorWeight = 0.45;
+            floor1 = [0.14,0.04,0.14];
+            floor2 = [0.04,0.18,0.04];
+            updateAlpha = min(alpha,0.14);
+        otherwise
+            prior1 = [1,1,1];
+            prior2 = [1,1,1];
+            priorWeight = 0;
+            floor1 = repmat(floorRate,1,3);
+            floor2 = repmat(floorRate,1,3);
+            updateAlpha = alpha;
+    end
+    floor1 = max(floor1,repmat(floorRate,1,3));
+    floor2 = max(floor2,repmat(floorRate,1,3));
+end
+
+function rates = LabUpdateCreditRatesWithPrior(oldRates,generated,score,alpha,floorRates,prior,priorWeight)
+    active = generated > 0;
+    normalizedScore = zeros(1,3);
+    normalizedScore(active) = (score(active) + 0.1)./(generated(active) + 0.3);
+    if sum(normalizedScore) <= 0
+        target = [1,1,1]./3;
+    else
+        target = normalizedScore./sum(normalizedScore);
+    end
+    prior  = LabNormalizeRates(prior);
+    target = (1-priorWeight).*target + priorWeight.*prior;
+    floorRates = reshape(floorRates,1,[]);
+    floorRates(~isfinite(floorRates) | floorRates < 0) = 0;
+    target = max(target,floorRates);
     target = target./sum(target);
     rates  = (1-alpha).*oldRates + alpha.*target;
     rates  = LabNormalizeRates(rates);
