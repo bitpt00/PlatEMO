@@ -126,6 +126,12 @@ function ratesByPop = LabSelectRatesByPopulation(policyName,customRates,creditRa
             ratesByPop = creditRatesByPop;
         case {'dual_mixed_credit'}
             ratesByPop = creditRatesByPop;
+        case {'dual_role_credit_v1','dual_role_credit','dual_role_v1'}
+            ratesByPop = creditRatesByPop;
+        case {'dual_role_credit_v2','dual_role_v2'}
+            ratesByPop = creditRatesByPop;
+        case {'dual_role_credit_v3','dual_role_v3','dual_role_sliding'}
+            ratesByPop = creditRatesByPop;
         otherwise
             rates = LabSelectRates(policyName,customRates,creditRates,progress);
             ratesByPop = repmat(rates,2,1);
@@ -437,6 +443,22 @@ function [creditRates,creditRatesByPop] = LabUpdatePolicyCredit(policyName,credi
             score2 = survivedByPop(2,:) + obs.objScore(2,:) + obs.cvScore(2,:);
             creditRatesByPop(1,:) = LabUpdateCreditRatesFromScore(creditRatesByPop(1,:),generatedByPop(1,:),score1,alpha,floorRate);
             creditRatesByPop(2,:) = LabUpdateCreditRatesFromScore(creditRatesByPop(2,:),generatedByPop(2,:),score2,alpha,floorRate);
+        case {'dual_role_credit_v1','dual_role_credit','dual_role_v1'}
+            score1 = survivedByPop(1,:) + obs.feasible(1,:) + obs.cvScore(1,:);
+            score2 = survivedByPop(2,:) + obs.objScore(2,:) + 0.5*survivedByPop(2,:);
+            creditRatesByPop(1,:) = LabUpdateCreditRatesFromScore(creditRatesByPop(1,:),generatedByPop(1,:),score1,alpha,floorRate);
+            creditRatesByPop(2,:) = LabUpdateCreditRatesFromScore(creditRatesByPop(2,:),generatedByPop(2,:),score2,alpha,floorRate);
+        case {'dual_role_credit_v2','dual_role_v2'}
+            score1 = survivedByPop(1,:) + 1.5*obs.cvScore(1,:) + 0.5*obs.feasible(1,:);
+            score2 = survivedByPop(2,:) + 1.5*obs.objScore(2,:);
+            creditRatesByPop(1,:) = LabUpdateCreditRatesFromScore(creditRatesByPop(1,:),generatedByPop(1,:),score1,alpha,floorRate);
+            creditRatesByPop(2,:) = LabUpdateCreditRatesFromScore(creditRatesByPop(2,:),generatedByPop(2,:),score2,alpha,max(floorRate,0.10));
+        case {'dual_role_credit_v3','dual_role_v3','dual_role_sliding'}
+            score1 = survivedByPop(1,:) + obs.feasible(1,:) + obs.cvScore(1,:);
+            score2 = survivedByPop(2,:) + obs.objScore(2,:) + 0.5*survivedByPop(2,:);
+            smoothAlpha = min(alpha,0.12);
+            creditRatesByPop(1,:) = LabUpdateCreditRatesFromScore(creditRatesByPop(1,:),generatedByPop(1,:),score1,smoothAlpha,max(floorRate,0.08));
+            creditRatesByPop(2,:) = LabUpdateCreditRatesFromScore(creditRatesByPop(2,:),generatedByPop(2,:),score2,smoothAlpha,max(floorRate,0.08));
     end
 end
 
