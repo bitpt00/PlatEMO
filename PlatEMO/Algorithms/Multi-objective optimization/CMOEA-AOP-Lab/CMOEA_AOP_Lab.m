@@ -14,7 +14,7 @@ classdef CMOEA_AOP_Lab < ALGORITHM
     end
     methods
         function main(Algorithm,Problem)
-            [policyName,customRates,creditAlpha,creditFloor] = Algorithm.ParameterSet('equal',[1/3,1/3,1/3],0.35,0.05);
+            [policyName,customRates,creditAlpha,creditFloor] = Algorithm.ParameterSet(LabDefaultPolicy(Algorithm),[1/3,1/3,1/3],0.35,0.05);
             policyName = lower(char(policyName));
 
             Population{1}  = Problem.Initialization();
@@ -113,6 +113,15 @@ classdef CMOEA_AOP_Lab < ALGORITHM
                 Algorithm.policyTrace(cnt).objScoreByPop  = creditObs.objScore;
             end
         end
+    end
+end
+
+function policyName = LabDefaultPolicy(Algorithm)
+    switch class(Algorithm)
+        case 'SCOP_CMOEA'
+            policyName = 'survival_credit';
+        otherwise
+            policyName = 'equal';
     end
 end
 
