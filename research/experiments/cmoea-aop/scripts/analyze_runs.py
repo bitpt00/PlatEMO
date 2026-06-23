@@ -95,6 +95,10 @@ def summarize_runs(rows, baseline):
             fail_rows[alg] += 1
 
     problems = sorted(problem_suite.keys(), key=lambda p: (SUITE_ORDER.get(problem_suite[p], 9), natural_problem_key(p)))
+    expected_runs = {
+        problem: max(len(grouped.get((alg, problem), [])) for alg in algorithms)
+        for problem in problems
+    }
     problem_stats = {}
     fail_problems = defaultdict(int)
     for alg in algorithms:
@@ -103,7 +107,11 @@ def summarize_runs(rows, baseline):
             igds = [parse_float(r.get("IGD")) for r in group]
             hvs = [parse_float(r.get("HV")) for r in group]
             feas = [parse_float(r.get("Feasible_rate")) for r in group]
-            bad_count = sum(1 for r in group if is_bad_run(r))
+            observed_bad_count = sum(1 for r in group if is_bad_run(r))
+            missing_count = max(0, expected_runs[problem] - len(group))
+            if missing_count > 0:
+                fail_rows[alg] += missing_count
+            bad_count = observed_bad_count + missing_count
             strict_score = math.inf if bad_count > 0 or not group else mean(igds)
             if bad_count > 0 or not group:
                 fail_problems[alg] += 1

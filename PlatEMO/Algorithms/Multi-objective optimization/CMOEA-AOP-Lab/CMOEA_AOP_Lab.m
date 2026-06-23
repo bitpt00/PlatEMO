@@ -124,6 +124,8 @@ function ratesByPop = LabSelectRatesByPopulation(policyName,customRates,creditRa
             ratesByPop = [0.5,0.0,0.5; 0.2,0.6,0.2];
         case {'dual_survival_credit','dual_credit'}
             ratesByPop = creditRatesByPop;
+        case {'biscop_cmoea','biscop','biscop_credit'}
+            ratesByPop = creditRatesByPop;
         case {'dual_mixed_credit'}
             ratesByPop = creditRatesByPop;
         case {'dual_role_credit_v1','dual_role_credit','dual_role_v1'}
@@ -446,6 +448,25 @@ function [creditRates,creditRatesByPop] = LabUpdatePolicyCredit(policyName,credi
             for i = 1 : 2
                 creditRatesByPop(i,:) = LabUpdateCreditRates(creditRatesByPop(i,:),generatedByPop(i,:),survivedByPop(i,:),alpha,floorRate);
             end
+        case {'biscop_cmoea','biscop','biscop_credit'}
+            updateAlpha = min(alpha,0.22);
+            localFloor  = max(floorRate,0.08);
+            sharedRates = LabUpdateCreditRates(creditRates,generated,survived,min(alpha,0.18),localFloor);
+            localRates  = creditRatesByPop;
+            for i = 1 : 2
+                localRates(i,:) = LabUpdateCreditRates(creditRatesByPop(i,:),generatedByPop(i,:),survivedByPop(i,:),updateAlpha,localFloor);
+            end
+            if progress < 0.20
+                coupling = 0.35;
+            elseif progress < 0.70
+                coupling = 0.25;
+            else
+                coupling = 0.20;
+            end
+            for i = 1 : 2
+                creditRatesByPop(i,:) = LabNormalizeRates((1-coupling).*localRates(i,:) + coupling.*sharedRates);
+            end
+            creditRates = LabNormalizeRates(mean(creditRatesByPop,1));
         case {'dual_mixed_credit'}
             score1 = survivedByPop(1,:) + obs.feasible(1,:) + obs.cvScore(1,:);
             score2 = survivedByPop(2,:) + obs.objScore(2,:) + obs.cvScore(2,:);

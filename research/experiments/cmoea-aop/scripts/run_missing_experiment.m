@@ -1,9 +1,8 @@
-function run_s01_experiment(configName,workerIndex,workerCount,maxNewTasks)
-%RUN_S01_EXPERIMENT Run S01 tasks and write one MAT file per run.
+function run_missing_experiment(configName,workerIndex,workerCount,maxNewTasks)
+%RUN_MISSING_EXPERIMENT Run missing experiment tasks only.
 %
-%   run_s01_experiment('s01_smoke_config',1,1)
-%   run_s01_experiment('s01_discovery_config',2,4)
-%   run_s01_experiment('s09_biscop_confirmation_config',2,6,20)
+%   This repair runner rebuilds the task matrix, filters out existing MAT
+%   files, and partitions only the remaining tasks among workers.
 
     if nargin < 1 || isempty(configName)
         configName = 's01_smoke_config';
@@ -26,10 +25,16 @@ function run_s01_experiment(configName,workerIndex,workerCount,maxNewTasks)
     end
 
     tasks = buildTasks(cfg);
-    logFile = fullfile(cfg.resultDir,sprintf('%s_run_log_worker%d_of_%d.csv',cfg.name,workerIndex,workerCount));
+    missing = false(1,numel(tasks));
+    for t = 1 : numel(tasks)
+        missing(t) = exist(resultFileName(cfg,tasks(t)),'file') ~= 2;
+    end
+    tasks = tasks(missing);
+
+    logFile = fullfile(cfg.resultDir,sprintf('%s_missing_log_worker%d_of_%d.csv',cfg.name,workerIndex,workerCount));
     writeLogHeader(logFile);
 
-    fprintf('S01 config=%s tasks=%d worker=%d/%d\n',cfg.name,numel(tasks),workerIndex,workerCount);
+    fprintf('Missing config=%s tasks=%d worker=%d/%d\n',cfg.name,numel(tasks),workerIndex,workerCount);
     newTasks = 0;
     for t = workerIndex : workerCount : numel(tasks)
         task = tasks(t);
@@ -46,7 +51,7 @@ function run_s01_experiment(configName,workerIndex,workerCount,maxNewTasks)
                 algArgs = [algArgs,{'parameter'},{task.parameter}];
             end
             Algorithm = feval(str2func(task.algorithmClass),algArgs{:});
-            fprintf('[%d/%d] %s on %s run=%d seed=%d\n',t,numel(tasks),task.algorithmLabel,task.problem,task.run,task.seed);
+            fprintf('[%d/%d missing] %s on %s run=%d seed=%d\n',t,numel(tasks),task.algorithmLabel,task.problem,task.run,task.seed);
             Algorithm.Solve(Problem);
 
             metadata = task;
@@ -71,11 +76,11 @@ function run_s01_experiment(configName,workerIndex,workerCount,maxNewTasks)
             newTasks = newTasks + 1;
         catch err
             appendLog(logFile,task,'error',err.message,resultFile);
-            warning('S01:RunFailed','%s on %s run %d failed: %s',task.algorithmLabel,task.problem,task.run,err.message);
+            warning('MissingRun:RunFailed','%s on %s run %d failed: %s',task.algorithmLabel,task.problem,task.run,err.message);
             newTasks = newTasks + 1;
         end
         if newTasks >= maxNewTasks
-            fprintf('Reached maxNewTasks=%d for worker=%d/%d\n',maxNewTasks,workerIndex,workerCount);
+            fprintf('Reached maxNewTasks=%d for missing worker=%d/%d\n',maxNewTasks,workerIndex,workerCount);
             break;
         end
     end
