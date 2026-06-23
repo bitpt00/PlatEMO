@@ -5,7 +5,7 @@ from collections import defaultdict, OrderedDict
 from pathlib import Path
 
 
-SUITE_ORDER = {"CF": 0, "LIR-CMOP": 1, "DAS-CMOP": 2}
+SUITE_ORDER = {"CF": 0, "LIR-CMOP": 1, "DAS-CMOP": 2, "MW": 3, "DOC": 4}
 
 
 def parse_float(value):
