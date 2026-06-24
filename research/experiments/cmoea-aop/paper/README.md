@@ -1,13 +1,14 @@
 # SCOP-CMOEA 论文写作材料索引
 
-这个目录保存从当前实验结果进入论文写作阶段所需的核心设计文档。
+这个目录保存从实验探索进入论文写作阶段所需的核心设计文档。
 
 ## 文档
 
 | 文件 | 用途 |
 | --- | --- |
+| `SCOP_paper_plan_following_CMOEA_AOP_and_CMOEA2S.md` | 按 CMOEA-AOP 和 CMOEA-2S 两篇模板论文整理的完整论文方案：实验结构、数据缺口、表格、图、执行顺序和写作主线 |
 | `SCOP_paper_experiment_design.md` | 论文实验章节设计：需要做哪些实验、出哪些表、画哪些图、正式 S11 如何设置 |
-| `SCOP_paper_story_design.md` | 论文故事和算法叙事：如何把 SCOP-CMOEA 讲成一个独立的新算法，而不是 CMOEA-AOP 的小修改 |
+| `SCOP_paper_story_design.md` | 论文故事和算法叙事：如何把 SCOP-CMOEA 讲成独立的新算法，而不是 CMOEA-AOP 的小修改 |
 
 ## 相关结果文件
 
@@ -27,16 +28,16 @@
 Environmental selection can serve as a credit assignment mechanism for offspring generation.
 ```
 
-中文：
+中文表达：
 
 ```text
-环境选择不仅决定谁被保留，也能告诉我们下一代应该由谁来产生更多 offspring。
+环境选择不仅决定哪些解被保留，也能告诉算法下一代应该由哪些算子产生更多 offspring。
 ```
 
 建议正式主实验：
 
 ```text
-10 个算法，56 个问题，30 次独立运行，N=100，maxFE=100000。
+10 个算法，56 个问题，30 次独立运行，N=100，MaxFE=100000。
 ```
 
 主表算法：
