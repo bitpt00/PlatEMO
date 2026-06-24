@@ -8,6 +8,7 @@
 | --- | --- |
 | `SCOP_next_execution_plan.md` | 接下来马上做哪些实验、怎么启动、怎么检查、怎么汇总、哪些图表由哪些脚本生成 |
 | `SCOP_paper_framework_CMOEA_AOP_style.md` | 按 CMOEA-AOP 论文结构复刻的 SCOP-CMOEA 论文框架，包含章节、图表和实验位置 |
+| `SCOP_experiment_checklist_Chen2026_style.md` | 参考 Chen2026 写法整理的实验章节清单：已有实验能否复用、还要补哪些实验、表图怎么安排 |
 
 ## 正式实验配置
 
