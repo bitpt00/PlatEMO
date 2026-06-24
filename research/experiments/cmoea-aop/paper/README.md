@@ -1,48 +1,27 @@
-# SCOP-CMOEA 论文写作材料索引
+# SCOP-CMOEA 论文执行材料
 
-这个目录保存从实验探索进入论文写作阶段所需的核心设计文档。
+这个目录只保留下一步实验、统计、出图和写作前准备的可执行方案。
 
-## 文档
-
-| 文件 | 用途 |
-| --- | --- |
-| `SCOP_paper_plan_following_CMOEA_AOP_and_CMOEA2S.md` | 按 CMOEA-AOP 和 CMOEA-2S 两篇模板论文整理的完整论文方案：实验结构、数据缺口、表格、图、执行顺序和写作主线 |
-| `SCOP_paper_experiment_design.md` | 论文实验章节设计：需要做哪些实验、出哪些表、画哪些图、正式 S11 如何设置 |
-| `SCOP_paper_story_design.md` | 论文故事和算法叙事：如何把 SCOP-CMOEA 讲成独立的新算法，而不是 CMOEA-AOP 的小修改 |
-
-## 相关结果文件
+## 当前唯一方案文档
 
 | 文件 | 用途 |
 | --- | --- |
-| `../summaries/S10_algorithm_selection_from_screen.md` | 基于 S10a 的 22 个算法排序和正式对比算法筛选 |
-| `../summaries/S10_platemo_screen_analysis.md` | S10a 自动统计摘要 |
-| `../summaries/S10_platemo_screen_result_interpretation.md` | S10a 结果解释和下一步建议 |
-| `../studies/S10_external_comparison/runs.csv` | S10a 6160 行运行结果汇总 |
-| `../studies/S10_external_comparison/problem_means.csv` | S10a 每个算法在每个问题上的均值统计 |
+| `SCOP_next_execution_plan.md` | 接下来马上做哪些实验、怎么启动、怎么检查、怎么汇总、哪些图表由哪些脚本生成 |
 
-## 当前论文主线
+## 正式实验配置
 
-建议论文中心句：
+| 配置文件 | 用途 |
+| --- | --- |
+| `../configs/s11_main_30run_config.m` | 10 算法、56 标准问题、30 run 主实验 |
+| `../configs/s12_portfolio_ablation_30run_config.m` | portfolio 消融 |
+| `../configs/s13_credit_signal_30run_config.m` | credit 信号消融 |
+| `../configs/s14_parameter_sensitivity_config.m` | 参数敏感性 |
+| `../configs/s15_rwmop_application_config.m` | RWMOP 应用实验 |
 
-```text
-Environmental selection can serve as a credit assignment mechanism for offspring generation.
-```
+## 马上执行
 
-中文表达：
+第一步启动 S11：
 
-```text
-环境选择不仅决定哪些解被保留，也能告诉算法下一代应该由哪些算子产生更多 offspring。
-```
-
-建议正式主实验：
-
-```text
-10 个算法，56 个问题，30 次独立运行，N=100，MaxFE=100000。
-```
-
-主表算法：
-
-```text
-SCOP-CMOEA, CMOEA-AOP, EMCMO, ICMA, IMTCMO,
-DRLOS-EMCMO, CMOES, DPCPRA, PPS, C-TAEA
+```powershell
+.\research\experiments\cmoea-aop\scripts\start_s10a_cpu_workers.ps1 -WorkerCount 12 -ConfigName s11_main_30run_config
 ```
