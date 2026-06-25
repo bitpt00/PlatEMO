@@ -10,11 +10,21 @@ function Offspring = OperatorConstrainedAOP(Problem, Population, MatingPool, act
 %--------------------------------------------------------------------------
 
     rates    = action;
-    ratesNum = floor(rates.*Problem.N);
+    rawNum   = rates.*Problem.N;
+    ratesNum = floor(rawNum);
     for item = 1 : length(action)
         if ratesNum(item) < 4
             ratesNum(item) = 4; % Set the minimum value to 4 so that each operator can be called normally
         end
+    end
+    while sum(ratesNum) < Problem.N
+        [~,item] = max(rawNum-ratesNum);
+        ratesNum(item) = ratesNum(item) + 1;
+    end
+    while sum(ratesNum) > Problem.N
+        candidates = find(ratesNum > 4);
+        [~,idx]    = max(ratesNum(candidates)-rawNum(candidates));
+        ratesNum(candidates(idx)) = ratesNum(candidates(idx)) - 1;
     end
     MatingPool = repmat(MatingPool,1,20);
     Offspring1 = OperatorGAhalf(Problem,Population{i}(MatingPool(1:ratesNum(1)*2)));

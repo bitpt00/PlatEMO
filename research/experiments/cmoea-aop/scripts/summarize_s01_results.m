@@ -14,6 +14,9 @@ function summarize_s01_results(configName)
         rows(end+1,:) = makeRow(data.metadata,data.metric,files(i).name,cfg.metrics); %#ok<AGROW>
     end
 
+    if exist(cfg.studyDir,'dir') ~= 7
+        mkdir(cfg.studyDir);
+    end
     outFile = fullfile(cfg.studyDir,'runs.csv');
     fid = fopen(outFile,'w');
     fprintf(fid,'config,algorithm,problem,suite,N,maxFE,run,seed,finishedFE,runtime');

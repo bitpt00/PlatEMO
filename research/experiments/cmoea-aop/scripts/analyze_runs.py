@@ -365,7 +365,7 @@ def make_conclusions(summary, baseline, has_trace):
         lines.append(f"- 单控制器 credit 方向中当前较值得保留的是 `{best_credit}`。")
     if has_trace:
         lines.append("- 机制轨迹应优先用于解释“为什么接近或优于 CMOEA-AOP”，尤其关注阶段比例变化和两个种群是否自然分化。")
-    lines.append("- 这些结果仍属于探索/确认阶段，正式论文级结论还需要更高 runs 和显著性检验。")
+    lines.append("- 这些结果已经可以作为 30-run 主实验依据；正式论文表述还需要补充显著性检验、消融实验和应用实验来支撑机制故事。")
     return lines
 
 
