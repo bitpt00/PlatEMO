@@ -58,16 +58,20 @@ classdef CMOEAAOP < ALGORITHM
                         MatingPool      = TournamentSelection(2,Problem.N,Fitness{i});                        
                         valOffspring{i} = OperatorConstrainedAOP(Problem,Population,MatingPool,action,i);
                     end
+                    baseN            = length(Population{2});
                     [~,~,Next]       = EnvironmentalSelection([Population{2},valOffspring{2}],Problem.N,1);
-                    succ_rate(1,cnt) = (sum(Next(1:Problem.N))/100) - (sum(Next(Problem.N+1:end))/50);
+                    succ_rate(1,cnt) = (sum(Next(1:baseN))/max(1,baseN)) - (sum(Next(baseN+1:end))/max(1,length(valOffspring{2})));
                     
+                    baseN            = length(Population{1});
                     [~,~,Next]       = EnvironmentalSelection([Population{1},valOffspring{1}],Problem.N,2);
-                    succ_rate(2,cnt) = (sum(Next(1:Problem.N))/100) - (sum(Next(Problem.N+1:end))/50);
+                    succ_rate(2,cnt) = (sum(Next(1:baseN))/max(1,baseN)) - (sum(Next(baseN+1:end))/max(1,length(valOffspring{1})));
                     
                     for i = 1 : 2
                         if succ_rate(i,cnt) > 0
-                            rand_number = randperm(Problem.N);
-                            [Population{i},Fitness{i},~] = EnvironmentalSelection([Population{i},valOffspring{i},Population{2/i}(rand_number(1:Problem.N/2))],Problem.N,i);
+                            otherSize   = length(Population{2/i});
+                            rand_number = randperm(otherSize);
+                            transferNum = min(floor(Problem.N/2),otherSize);
+                            [Population{i},Fitness{i},~] = EnvironmentalSelection([Population{i},valOffspring{i},Population{2/i}(rand_number(1:transferNum))],Problem.N,i);
                         else
                             [Population{i},Fitness{i},~] = EnvironmentalSelection([Population{i},valOffspring{i},valOffspring{2/i}],Problem.N,i);
                         end

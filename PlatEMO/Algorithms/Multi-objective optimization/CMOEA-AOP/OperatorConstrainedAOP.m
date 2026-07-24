@@ -26,10 +26,15 @@ function Offspring = OperatorConstrainedAOP(Problem, Population, MatingPool, act
         [~,idx]    = max(ratesNum(candidates)-rawNum(candidates));
         ratesNum(candidates(idx)) = ratesNum(candidates(idx)) - 1;
     end
-    MatingPool = repmat(MatingPool,1,20);
+    popSize = length(Population{i});
+    MatingPool = MatingPool(MatingPool >= 1 & MatingPool <= popSize);
+    if isempty(MatingPool)
+        MatingPool = randi(popSize,1,Problem.N);
+    end
+    MatingPool = repmat(MatingPool,1,ceil(2*ratesNum(1)/length(MatingPool))+1);
     Offspring1 = OperatorGAhalf(Problem,Population{i}(MatingPool(1:ratesNum(1)*2)));
-    Offspring2 = OperatorDE(Problem,Population{i}(randi(ceil(Problem.N),1,ratesNum(2))),Population{i}(randi(ceil(Problem.N),1,ratesNum(2))),Population{i}(randi(ceil(Problem.N),1,ratesNum(2))));
+    Offspring2 = OperatorDE(Problem,Population{i}(randi(popSize,1,ratesNum(2))),Population{i}(randi(popSize,1,ratesNum(2))),Population{i}(randi(popSize,1,ratesNum(2))));
     p3         = Population{i};
-    Offspring3 = DEBest(Problem, p3(randi(ceil(Problem.N),1,ratesNum(3))),ratesNum(3));
+    Offspring3 = DEBest(Problem, p3(randi(popSize,1,ratesNum(3))),ratesNum(3));
     Offspring  = [Offspring1 Offspring2 Offspring3];
 end
