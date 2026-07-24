@@ -1,58 +1,85 @@
-# SCOP-CMOEA 下一步实验与出图执行方案
+# SCOP-CMOEA 全局实验补齐方案
 
-只保留这份执行文档。目标是把论文实验补齐到可以写稿。
+更新日期：2026-07-24
 
-## 1. 先做什么
+目标：把 SCOP-CMOEA 的实验包补齐到可以直接写论文，而不是继续零散探索。当前已经完成的结果要尽量复用，后续只补论文闭环中缺失的部分。
 
-| 顺序 | 编号 | 内容 | 是否必须 | 结果用途 |
-| ---: | --- | --- | --- | --- |
-| 1 | S11 | 10 个算法、56 个标准问题、30 run 主实验 | 必须 | 论文主性能表、排名、显著性 |
-| 2 | S12 | portfolio 消融，检验单算子/均匀/随机/阶段/SCOP/DDPG | 必须 | 说明收益来自 survival-credit portfolio |
-| 3 | S13 | credit 信号消融，比较 feasibility/CV/objective/mixed/sliding | 必须 | 说明为什么 survival credit 是核心 |
-| 4 | S14 | `creditAlpha` 和 `creditFloor` 参数敏感性 | 必须 | 说明参数稳定性 |
-| 5 | S15 | RWMOP1-RWMOP20 应用实验 | 建议 | 增加真实问题证据 |
+## 1. 当前暂停状态
 
-先跑 S11。S11 统计完成后再跑 S12 和 S13；S12、S13 可以并行。S14、S15 放后面。
+- 当前 SCOP MATLAB 进程已经停止，MATLAB 进程数为 0。
+- 原来的 `scop` 自动心跳监控已经删除，不会再自动重启补跑。
+- S12 已有 `12545 / 15120` 个 MAT。
+- S13 已有 `10835 / 15120` 个 MAT。
+- 后续恢复时不需要重跑，只用 `MissingOnly` 从缺失任务继续。
 
-## 2. 已经补好的配置文件
+## 2. 论文主线
 
-| 实验 | 配置文件 | 运行量 |
-| --- | --- | ---: |
-| S11 主实验 | `research/experiments/cmoea-aop/configs/s11_main_30run_config.m` | 10 × 56 × 30 = 16800 |
-| S12 portfolio 消融 | `research/experiments/cmoea-aop/configs/s12_portfolio_ablation_30run_config.m` | 9 × 56 × 30 = 15120 |
-| S13 credit 消融 | `research/experiments/cmoea-aop/configs/s13_credit_signal_30run_config.m` | 9 × 56 × 30 = 15120 |
-| S14 参数敏感性 | `research/experiments/cmoea-aop/configs/s14_parameter_sensitivity_config.m` | 16 × 15 × 20 = 4800 |
-| S15 RWMOP 应用 | `research/experiments/cmoea-aop/configs/s15_rwmop_application_config.m` | 8 × 20 × 30 = 4800 |
+SCOP-CMOEA 不写成对 CMOEA-AOP 的小修补，也不以“DDPG 是否必要”作为论文题目。
 
-统一设置：
+建议主线写成：
 
 ```text
-N = 100
-MaxFE = 100000
-S11/S12/S13/S15 = 30 run
-S14 = 20 run
-标准问题指标 = IGD, HV, Feasible_rate, runtime
-RWMOP 指标 = HV, Feasible_rate, runtime
+在约束多目标优化中，offspring generation 的算子预算本身是一种搜索资源。
+SCOP-CMOEA 用环境选择后的生存反馈，为不同生成算子分配资源，
+从而形成一种简单、低成本、可解释的自适应算子组合机制。
 ```
 
-## 3. S11 主实验
-
-### 3.1 对比算法
+核心关键词：
 
 ```text
-SCOP-CMOEA
-CMOEA-AOP
-EMCMO
-ICMA
-IMTCMO
-DRLOS-EMCMO
-CMOES
-DPCPRA
-PPS
-C-TAEA
+survival-credit operator portfolio
+offspring generation resource allocation
+adaptive operator portfolio for constrained multi-objective optimization
 ```
 
-### 3.2 测试问题
+## 3. 参考补实验方案对照
+
+参考另一篇文章的方案后，SCOP 这篇也应该形成五层闭环：
+
+| 层级 | 作用 | SCOP 对应实验 | 当前状态 | 是否还要补 |
+| --- | --- | --- | --- | --- |
+| E1 主性能外部对比 | 证明算法有竞争力 | S11 主实验 | 已完成 | 不需要重跑 |
+| E2 机制消融 | 证明核心机制不是偶然调参 | S12 + S13 | 正在补，已暂停 | 必须完成 |
+| E3 参数稳定性 | 证明参数不敏感 | S14 | 未开始 | 必须完成 |
+| E4 泛化/应用 | 证明不只在标准问题有效 | S15 RWMOP | 未开始 | 建议完成 |
+| E5 图表与统计闭环 | 支撑论文写作 | 收敛曲线、最终解、runtime、Wilcoxon、Friedman | 部分已有数据 | 必须整理 |
+
+此外，建议增加一个较小的 baseline 补强实验：
+
+| 层级 | 作用 | 建议实验 | 是否必须 |
+| --- | --- | --- | --- |
+| E6 参考论文 baseline 补强 | 补齐 CMOEA-AOP 和 CMOEA-2S 语境中常见但 S11 未放入主表的算法 | S16 reference-baseline supplement | 建议做 |
+
+高预算实验暂时不作为必做：
+
+```text
+S17 high-budget robustness:
+只在主结果需要更强说服力时做。
+建议选 LIR-CMOP / DAS-CMOP / DOC 代表问题，5-6 个算法，maxFE = 200000 或 300000。
+```
+
+## 4. 已有实验怎样复用
+
+| 实验 | 规模 | 用途 |
+| --- | --- | --- |
+| S01-S04 | 低预算机制拆解 | 写动机和发现过程，不作为最终性能结论 |
+| S05-S09 | 候选方法确认 | 写算法形成过程和机制证据 |
+| S10 | PlatEMO 多算法筛选 | 说明 S11 baseline 选择依据 |
+| S11 | 10 算法 × 56 问题 × 30 run | 论文主性能表 |
+| S12 | 9 方法 × 56 问题 × 30 run | portfolio 消融，需补完 |
+| S13 | 9 方法 × 56 问题 × 30 run | credit 信号消融，需补完 |
+
+S11 已经足够做主表：
+
+```text
+算法：10 个
+问题：56 个
+runs：30
+N：100
+maxFE：100000
+```
+
+56 个问题包括：
 
 ```text
 CF1-CF10
@@ -62,252 +89,107 @@ MW1-MW14
 DOC1-DOC9
 ```
 
-共 56 个问题。这个集合覆盖 CMOEA-AOP 的 CF/LIR/DAS，也覆盖 CMOEA-2S 的 LIR/DOC/CF，并补充 MW。
+## 5. 还需要补哪些实验
 
-### 3.3 启动命令
+### P0：必须补完
 
-用 CPU 多进程，不用 GPU。20 线程机器建议 12 个 MATLAB worker 起跑。
+1. S12 portfolio 消融补完到 `15120` 个 MAT。
+2. S13 credit 信号消融补完到 `15120` 个 MAT。
+3. S14 参数敏感性跑完：`16 × 15 × 20 = 4800`。
+4. S15 RWMOP 应用实验跑完：`8 × 20 × 30 = 4800`。
+5. 为 S11-S15 导出 `runs.csv`、`problem_means.csv`、`trace_summary.csv`、`trace_phase_summary.csv`。
+6. 生成正式统计表：IGD、HV、Feasible_rate、runtime、Wilcoxon、Friedman、suite-level rank。
+7. 生成正式图：算法框架图、机制发现图、算子比例轨迹、消融柱状图、参数热力图、runtime 图、RWMOP 图。
 
-```powershell
-.\research\experiments\cmoea-aop\scripts\start_s10a_cpu_workers.ps1 -WorkerCount 12 -ConfigName s11_main_30run_config
-```
+### P1：建议补强
 
-补跑缺失任务：
+S16 reference-baseline supplement。
 
-```powershell
-.\research\experiments\cmoea-aop\scripts\start_s10a_cpu_workers.ps1 -WorkerCount 12 -ConfigName s11_main_30run_config -MissingOnly
-```
+目的：补齐参考论文常见 baseline，避免审稿时被问为什么没有 BiCo、ToP、CMOEA-MS 等算法。
 
-检查任务数量：
-
-```powershell
-Get-ChildItem .\research\experiments\cmoea-aop\results\S11_main_30run\s11_main_30run -Filter *.mat | Measure-Object
-```
-
-完成标准：
+建议算法：
 
 ```text
-MAT 文件数量 = 16800
-错误日志中没有未处理失败
+BiCo
+ToP
+CMOEA-MS
+C3M
+TSTI
+AGE-MOEA-II
 ```
 
-### 3.4 S11 汇总命令
+建议问题：
 
-MATLAB 导出 runs.csv：
-
-```powershell
-matlab -batch "cd('E:\多目标优化\PlatEMO-master'); addpath('research\experiments\cmoea-aop\scripts'); summarize_s01_results('s11_main_30run_config'); summarize_policy_traces('s11_main_30run_config');"
+```text
+CF + LIR-CMOP + DAS-CMOP + MW + DOC，共 56 个问题
 ```
 
-Python 生成排名摘要：
+建议参数：
 
-```powershell
-python research\experiments\cmoea-aop\scripts\analyze_runs.py --runs research\experiments\cmoea-aop\studies\S11_main_30run\runs.csv --problem-means research\experiments\cmoea-aop\studies\S11_main_30run\problem_means.csv --summary research\experiments\cmoea-aop\summaries\S11_main_30run_analysis.md --title "S11 主实验 30-run 统计" --baseline CMOEA-AOP --trace-summary research\experiments\cmoea-aop\studies\S11_main_30run\trace_summary.csv --trace-phase research\experiments\cmoea-aop\studies\S11_main_30run\trace_phase_summary.csv
+```text
+N = 100
+maxFE = 100000
+runs = 30
 ```
 
-S11 需要生成的表：
+运行量：
 
-| 表 | 文件 | 生成方式 |
+```text
+6 × 56 × 30 = 10080 runs
+```
+
+S16 不替代 S11 主表。它作为补充 baseline 表，可以和 S11 中已有的 SCOP-CMOEA、CMOEA-AOP、EMCMO、PPS、C-TAEA 等结果合并分析。
+
+### P2：可选增强
+
+S17 high-budget robustness。
+
+只在 S11-S16 整理后仍需要增强说服力时做。
+
+建议设置：
+
+```text
+代表问题：LIRCMOP3, LIRCMOP10, LIRCMOP13, DASCMOP5, DASCMOP8, DOC6, DOC8
+算法：SCOP-CMOEA, CMOEA-AOP, EMCMO, DRLOS-EMCMO, PPS, BiCo
+maxFE = 200000 或 300000
+runs = 30
+```
+
+这个实验不是当前写论文的第一优先级。
+
+## 6. 论文表格清单
+
+| 表 | 内容 | 数据来源 |
 | --- | --- | --- |
-| 主表 1：IGD 平均排名 | `S11_main_30run_analysis.md` | `analyze_runs.py` |
-| 主表 2：HV 平均值/排名 | 需新增 `export_paper_tables.py` | Python 从 `runs.csv` 统计 |
-| 主表 3：Wilcoxon 胜/平/负 | 需新增 `export_paper_tables.py` | Python，按 30 run 做检验 |
-| 主表 4：分问题族排名 | `S11_main_30run_analysis.md` | `analyze_runs.py` |
-| 主表 5：FR 和失败问题 | `problem_means.csv` | Python |
-| 主表 6：runtime | 需新增 `export_paper_tables.py` | Python 从 `runs.csv` 统计 |
+| T1 | 实验参数、测试集、指标 | 手工 + configs |
+| T2 | 对比算法、类别、年份 | PlatEMO 算法文件 + 文献 |
+| T3 | S11 主实验 IGD/HV 总排名 | S11 `runs.csv` |
+| T4 | S11 相对各 baseline 的 Wilcoxon 胜/平/负 | S11 `runs.csv` |
+| T5 | CF/LIR/DAS/MW/DOC 分测试集排名 | S11 `problem_means.csv` |
+| T6 | S12 portfolio 消融结果 | S12 `runs.csv` |
+| T7 | S13 credit 信号消融结果 | S13 `runs.csv` |
+| T8 | S14 参数敏感性结果 | S14 `runs.csv` |
+| T9 | S15 RWMOP HV/FR/runtime | S15 `runs.csv` |
+| T10 | S16 补充 baseline 排名 | S16 + S11 合并 |
+| 附录 | 56 问题完整 IGD/HV mean(std) | S11-S16 |
 
-## 4. S12 portfolio 消融
+## 7. 论文图清单
 
-### 4.1 方法
-
-```text
-SCOP-CMOEA
-CMOEA-AOP
-EMCMO
-GA-only
-DE-rand-only
-DE-best-only
-Equal-AOP
-Random-AOP
-Stage-AOP
-```
-
-### 4.2 启动命令
-
-```powershell
-.\research\experiments\cmoea-aop\scripts\start_s10a_cpu_workers.ps1 -WorkerCount 12 -ConfigName s12_portfolio_ablation_30run_config
-```
-
-完成标准：
-
-```text
-MAT 文件数量 = 15120
-```
-
-### 4.3 汇总命令
-
-```powershell
-matlab -batch "cd('E:\多目标优化\PlatEMO-master'); addpath('research\experiments\cmoea-aop\scripts'); summarize_s01_results('s12_portfolio_ablation_30run_config'); summarize_policy_traces('s12_portfolio_ablation_30run_config');"
-python research\experiments\cmoea-aop\scripts\analyze_runs.py --runs research\experiments\cmoea-aop\studies\S12_portfolio_ablation_30run\runs.csv --problem-means research\experiments\cmoea-aop\studies\S12_portfolio_ablation_30run\problem_means.csv --summary research\experiments\cmoea-aop\summaries\S12_portfolio_ablation_30run_analysis.md --title "S12 portfolio 消融 30-run 统计" --baseline SCOP-CMOEA --trace-summary research\experiments\cmoea-aop\studies\S12_portfolio_ablation_30run\trace_summary.csv --trace-phase research\experiments\cmoea-aop\studies\S12_portfolio_ablation_30run\trace_phase_summary.csv
-```
-
-S12 要回答：
-
-```text
-SCOP 是否优于单算子、均匀比例、随机比例和人工阶段比例。
-```
-
-## 5. S13 credit 信号消融
-
-### 5.1 方法
-
-```text
-SCOP-CMOEA
-CMOEA-AOP
-EMCMO
-Equal-AOP
-Feasibility-Credit-AOP
-CV-Credit-AOP
-Objective-Credit-AOP
-Mixed-Credit-AOP
-Sliding-Survival-Credit-AOP
-```
-
-### 5.2 启动命令
-
-```powershell
-.\research\experiments\cmoea-aop\scripts\start_s10a_cpu_workers.ps1 -WorkerCount 12 -ConfigName s13_credit_signal_30run_config
-```
-
-完成标准：
-
-```text
-MAT 文件数量 = 15120
-```
-
-### 5.3 汇总命令
-
-```powershell
-matlab -batch "cd('E:\多目标优化\PlatEMO-master'); addpath('research\experiments\cmoea-aop\scripts'); summarize_s01_results('s13_credit_signal_30run_config'); summarize_policy_traces('s13_credit_signal_30run_config');"
-python research\experiments\cmoea-aop\scripts\analyze_runs.py --runs research\experiments\cmoea-aop\studies\S13_credit_signal_30run\runs.csv --problem-means research\experiments\cmoea-aop\studies\S13_credit_signal_30run\problem_means.csv --summary research\experiments\cmoea-aop\summaries\S13_credit_signal_30run_analysis.md --title "S13 credit 信号消融 30-run 统计" --baseline SCOP-CMOEA --trace-summary research\experiments\cmoea-aop\studies\S13_credit_signal_30run\trace_summary.csv --trace-phase research\experiments\cmoea-aop\studies\S13_credit_signal_30run\trace_phase_summary.csv
-```
-
-S13 要回答：
-
-```text
-survival 信号是否比 feasibility、CV、objective、mixed、sliding 更适合作为算子信用。
-```
-
-## 6. S14 参数敏感性
-
-参数：
-
-```text
-creditAlpha = 0.12, 0.25, 0.35, 0.50
-creditFloor = 0.00, 0.03, 0.05, 0.10
-```
-
-代表问题：
-
-```text
-CF3, CF6, CF8
-LIRCMOP3, LIRCMOP10, LIRCMOP13
-DASCMOP1, DASCMOP5, DASCMOP8
-DOC4, DOC6, DOC8
-MW5, MW9, MW12
-```
-
-启动：
-
-```powershell
-.\research\experiments\cmoea-aop\scripts\start_s10a_cpu_workers.ps1 -WorkerCount 12 -ConfigName s14_parameter_sensitivity_config
-```
-
-完成标准：
-
-```text
-MAT 文件数量 = 4800
-```
-
-图：
-
-```text
-Python 画热力图。
-x 轴 = creditFloor
-y 轴 = creditAlpha
-颜色 = 平均排名或平均 IGD
-输出 = research/experiments/cmoea-aop/paper/figures/F_param_sensitivity.png
-```
-
-## 7. S15 RWMOP 应用
-
-问题：
-
-```text
-RWMOP1-RWMOP20
-```
-
-算法：
-
-```text
-SCOP-CMOEA, CMOEA-AOP, EMCMO, ICMA, IMTCMO, DRLOS-EMCMO, DPCPRA, PPS
-```
-
-指标：
-
-```text
-HV, Feasible_rate, runtime
-```
-
-启动：
-
-```powershell
-.\research\experiments\cmoea-aop\scripts\start_s10a_cpu_workers.ps1 -WorkerCount 12 -ConfigName s15_rwmop_application_config
-```
-
-完成标准：
-
-```text
-MAT 文件数量 = 4800
-```
-
-## 8. 图怎么画
-
-原则：
-
-```text
-MATLAB 只负责跑算法和从 MAT 导出必要 CSV。
-Python 负责统计、画图、导出 PNG/PDF。
-不手工在 MATLAB Figure 窗口里调图。
-```
-
-需要新增 3 个脚本：
-
-| 脚本 | 语言 | 作用 |
+| 图 | 内容 | 是否需要新跑算法 |
 | --- | --- | --- |
-| `scripts/export_final_populations.m` | MATLAB | 从代表问题 MAT 文件导出最终 PopObj/PopCon CSV |
-| `scripts/export_convergence_curves.m` | MATLAB | 从 metric 结构导出每个 run 的 IGD/HV 曲线 CSV |
-| `scripts/plot_paper_figures.py` | Python | 从 CSV/runs/trace 画全部论文图 |
+| F1 | SCOP-CMOEA 框架图 | 否 |
+| F2 | 从机制拆解到 SCOP 的发现路径 | 否 |
+| F3 | 代表问题最终解散点图 | 否，需从 MAT 导出 |
+| F4 | IGD/HV 收敛曲线 | 否，需从 metric 导出 |
+| F5 | SCOP 算子比例随 FE 变化轨迹 | 否，来自 trace |
+| F6 | survival credit / survived offspring 热力图 | 否，来自 trace |
+| F7 | portfolio 消融柱状图 | 需要 S12 完成 |
+| F8 | credit 信号消融柱状图 | 需要 S13 完成 |
+| F9 | 参数敏感性热力图 | 需要 S14 完成 |
+| F10 | runtime 箱线图 | 否，来自 runs.csv |
+| F11 | RWMOP 应用 HV/FR 图 | 需要 S15 完成 |
 
-### 8.1 论文图清单
-
-| 图 | 数据来源 | 画图脚本 | 输出文件 |
-| --- | --- | --- | --- |
-| F1 算法框架图 | 手工结构数据 | Python/mermaid 二选一，最终用矢量图 | `paper/figures/F1_framework.pdf` |
-| F2 机制发现图 | S01-S09 summary + 手工整理小表 | Python 画流程图 | `paper/figures/F2_discovery_path.pdf` |
-| F3 最终解集散点图 | S11 代表问题最终种群 | MATLAB 导 CSV，Python 画 | `paper/figures/F3_final_solutions.pdf` |
-| F4 IGD 收敛曲线 | S11 metric 曲线 | MATLAB 导 CSV，Python 画 | `paper/figures/F4_convergence_igd.pdf` |
-| F5 算子比例轨迹 | S11/S12 `trace_phase_summary.csv` 和原始 trace | Python 画 | `paper/figures/F5_operator_ratios.pdf` |
-| F6 survival credit 热力图 | S11/S12 `trace_summary.csv` | Python 画 | `paper/figures/F6_survival_heatmap.pdf` |
-| F7 portfolio 消融柱状图 | S12 `runs.csv` | Python 画 | `paper/figures/F7_portfolio_ablation.pdf` |
-| F8 credit 信号消融柱状图 | S13 `runs.csv` | Python 画 | `paper/figures/F8_credit_ablation.pdf` |
-| F9 参数敏感性热力图 | S14 `runs.csv` | Python 画 | `paper/figures/F9_parameter_sensitivity.pdf` |
-| F10 runtime 箱线图 | S11 `runs.csv` | Python 画 | `paper/figures/F10_runtime.pdf` |
-| F11 RWMOP HV 箱线图 | S15 `runs.csv` | Python 画 | `paper/figures/F11_rwmop_hv.pdf` |
-
-### 8.2 代表问题
-
-最终解集图和收敛曲线先固定这些问题：
+代表问题先固定为：
 
 ```text
 CF6
@@ -317,65 +199,33 @@ DOC8
 MW9
 ```
 
-如果 S11 结果显示某个问题更有代表性，再替换，但每个问题族最多保留 1 个主文图。
+统计完成后，如果某个问题更适合作图，再替换。
 
-## 9. 表怎么做
+## 8. 恢复执行顺序
 
-需要新增：
+当前先暂停，不立即启动。
 
-```text
-research/experiments/cmoea-aop/scripts/export_paper_tables.py
-```
+后续恢复时按这个顺序：
 
-它从 `runs.csv` 和 `problem_means.csv` 生成：
+1. 用 `MissingOnly` 继续 S12 和 S13，直到两个目录都达到 `15120` 个 MAT。
+2. 导出 S12/S13 的 CSV 和 trace，并立刻做初步统计。
+3. 启动 S14 和 S15，可以并行，各 10 个 worker，总 worker 控制在 20 左右。
+4. S14/S15 完成后导出 CSV 和统计表。
+5. 如果时间允许，启动 S16 baseline 补强。
+6. 数据齐后再写 `export_paper_tables.py` 和 `plot_paper_figures.py`，统一出表和出图。
 
-| 表 | 内容 | 文件 |
-| --- | --- | --- |
-| T1 | benchmark 与参数设置 | `paper/tables/T1_settings.md` |
-| T2 | 对比算法、年份、类别 | `paper/tables/T2_algorithms.md` |
-| T3 | S11 IGD/HV 总体排名 | `paper/tables/T3_main_rank.md` |
-| T4 | S11 Wilcoxon 胜/平/负 | `paper/tables/T4_wilcoxon.md` |
-| T5 | 分问题族排名 | `paper/tables/T5_suite_rank.md` |
-| T6 | S12 portfolio 消融 | `paper/tables/T6_portfolio_ablation.md` |
-| T7 | S13 credit 消融 | `paper/tables/T7_credit_ablation.md` |
-| T8 | S14 参数敏感性 | `paper/tables/T8_parameter.md` |
-| T9 | S15 RWMOP HV/FR | `paper/tables/T9_rwmop.md` |
-| T10 | runtime | `paper/tables/T10_runtime.md` |
+## 9. 可以开始写论文的最低标准
 
-主文不放 56 问题完整大表。完整大表放附录：
+满足下面条件即可开始写实验部分：
 
 ```text
-paper/tables/appendix_igd_full.csv
-paper/tables/appendix_hv_full.csv
+S11 已完成并完成正式统计；
+S12 和 S13 完成，能证明 survival-credit portfolio 的必要性；
+S14 完成，能说明参数稳定性；
+S15 完成，能给出真实问题或应用泛化证据；
+runtime、Wilcoxon、Friedman、suite-level rank 都已导出；
+至少有 3 类图：机制图、轨迹图、消融图；
+S16 如果来不及，可以作为补充实验或修稿增强项。
 ```
 
-## 10. 当前最小可执行路线
-
-按这个顺序做，不再中途改方向：
-
-```text
-1. 启动 S11。
-2. 每 2-3 小时检查一次 MAT 数量和错误日志。
-3. S11 到 16800 后，导出 runs.csv、trace_summary.csv、problem_means.csv。
-4. 生成 S11 统计摘要，确认 SCOP 的 30-run 排名和胜负。
-5. 启动 S12 和 S13，可同时开两批，但总 MATLAB worker 不超过 12-14。
-6. S12/S13 完成后先生成消融表和轨迹图。
-7. 再启动 S14。
-8. 最后启动 S15。
-9. 数据全齐后写 `export_paper_tables.py` 和 `plot_paper_figures.py`，生成全部表图。
-```
-
-20 线程 CPU 建议：
-
-```text
-普通阶段：12 个 MATLAB worker
-如果内存稳定且无明显卡顿：14 个 worker
-不要开 GPU
-每个 MATLAB 内部 maxNumCompThreads(1)
-```
-
-## 11. 第一条马上执行的命令
-
-```powershell
-.\research\experiments\cmoea-aop\scripts\start_s10a_cpu_workers.ps1 -WorkerCount 12 -ConfigName s11_main_30run_config
-```
+如果 S16 完成，再开始全文写作会更稳。
